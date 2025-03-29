@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDoS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #222;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+        }
+        #log {
+            margin-top: 20px;
+            border: 1px solid #555;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            background: #444;
+            color: #ddd;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DDoS Test Page</h1>
+        <p>Simulating incoming requests...</p>
+        <div id="log"></div>
+        <button class="btn" onclick="clearLog()">Clear Log</button>
+    </div>
+    <script>
+        let activeUsers = {};function logRequest(userId) {
+        const log = document.getElementById("log");
+        const time = new Date().toLocaleTimeString();
+
+        activeUsers[userId] = time;
+        
+        const entry = document.createElement("p");
+        entry.textContent = `📡 Request received at ${time} from user ${userId}`;
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function detectMultipleLogins() {
+        const log = document.getElementById("log");
+        if (Object.keys(activeUsers).length > 1) {
+            const warning = document.createElement("p");
+            warning.textContent = "⚠️ Multiple users detected accessing the page!";
+            warning.style.color = "red";
+            log.appendChild(warning);
+            log.scrollTop = log.scrollHeight;
+        }
+    }
+
+    function clearLog() {
+        document.getElementById("log").innerHTML = "";
+        activeUsers = {}; // Reset active users
+    }
+
+    function trackUser() {
+        const userId = Math.random().toString(36).substr(2, 9); // Simulating unique session ID
+        logRequest(userId);
+        setInterval(detectMultipleLogins, 2000);
+    }
+
+    window.onload = trackUser;
+</script>
+</body>
+</html>
